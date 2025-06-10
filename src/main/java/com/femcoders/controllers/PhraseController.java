@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/phrases")
+@RequestMapping(value="/phrases")
 public class PhraseController {
     private final PhraseService phraseService;
 
@@ -37,5 +37,17 @@ public class PhraseController {
         }
 
         return ResponseEntity.ok(phrase);
+    }
+
+    @DeleteMapping("/{id}")
+//    @ResponseBody
+    public ResponseEntity<Object> deletePhraseById(@PathVariable Integer id ){
+        Phrase phrase = this.phraseService.deletePhraseById(id);
+
+        if (phrase == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().build();
     }
 }
