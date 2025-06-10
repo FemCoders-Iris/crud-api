@@ -1,4 +1,4 @@
-package com.femcoders.crud_api;
+package com.femcoders.models;
 
 import jakarta.persistence.*;
 

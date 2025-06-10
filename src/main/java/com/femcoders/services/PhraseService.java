@@ -1,8 +1,8 @@
-package com.femcoders.crud_api;
+package com.femcoders.services;
 
-import com.femcoders.repository.PhraseRepository;
+import com.femcoders.models.Phrase;
+import com.femcoders.repositories.PhraseRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
