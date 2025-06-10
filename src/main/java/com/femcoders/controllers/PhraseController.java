@@ -40,7 +40,6 @@ public class PhraseController {
     }
 
     @DeleteMapping("/{id}")
-//    @ResponseBody
     public ResponseEntity<Object> deletePhraseById(@PathVariable Integer id ){
         Phrase phrase = this.phraseService.deletePhraseById(id);
 
@@ -49,5 +48,16 @@ public class PhraseController {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updatePhraseById(@PathVariable Integer id, @RequestBody Phrase updatedPhrase ){
+        Phrase phrase = this.phraseService.updatePhrase(id, updatedPhrase);
+
+        if (phrase == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(phrase);
     }
 }

@@ -1,8 +1,7 @@
 package com.femcoders.models;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "phrases")
@@ -20,7 +19,9 @@ public class Phrase {
 
     private String topic;
 
-    private LocalDate dateAdded;
+    private LocalDateTime dateAdded;
+
+    private LocalDateTime dateModified;
 
     public Phrase() {}
 
@@ -64,11 +65,19 @@ public class Phrase {
         this.topic = topic;
     }
 
-    public LocalDate getDateAdded() {
+    public LocalDateTime getDateAdded() {
         return dateAdded;
     }
 
-    public void setDateAdded(LocalDate dateAdded) {
+    public void setDateAdded(LocalDateTime dateAdded) {
         this.dateAdded = dateAdded;
+    }
+
+    public LocalDateTime getDateModified() {
+        return dateModified;
+    }
+
+    public void setDateModified(LocalDateTime dateModified) {
+        this.dateModified = dateModified;
     }
 }
