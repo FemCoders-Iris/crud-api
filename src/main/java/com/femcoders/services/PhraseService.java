@@ -26,15 +26,15 @@ public class PhraseService {
         return this.phraseRepository.findAll();
     }
 
-    public ResponseEntity<Object> getPhraseById(Integer id){
+    public Phrase getPhraseById(Integer id){
         Optional<Phrase> phraseOptional = this.phraseRepository.findById(id);
 
         if(!phraseOptional.isPresent()){
-            return ResponseEntity.notFound().build();
+            return null;
         }
 
         Phrase phrase = phraseOptional.get();
 
-        return ResponseEntity.ok(phrase);
+        return phrase;
     }
 }
