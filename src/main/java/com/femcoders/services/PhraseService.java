@@ -37,4 +37,17 @@ public class PhraseService {
 
         return phrase;
     }
+
+    public Phrase deletePhraseById(Integer id){
+        Optional<Phrase> phraseOptional = this.phraseRepository.findById(id);
+
+        if(!phraseOptional.isPresent()){
+            return null;
+        }
+
+        Phrase phrase = phraseOptional.get();
+        this.phraseRepository.deleteById(id);
+
+        return phrase;
+    }
 }
