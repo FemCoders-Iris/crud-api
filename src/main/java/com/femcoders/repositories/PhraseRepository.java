@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PhraseRepository extends JpaRepository<Phrase, Integer> {
-    @Query("SELECT * FROM phrases p WHERE " +
+    @Query("SELECT p FROM Phrase p WHERE " +
             "LOWER(p.title) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
             "LOWER(p.content) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
             "LOWER(p.topic) LIKE LOWER(CONCAT('%', :searchText, '%')) OR " +
