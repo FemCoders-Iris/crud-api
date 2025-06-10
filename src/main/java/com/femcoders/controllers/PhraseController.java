@@ -60,4 +60,14 @@ public class PhraseController {
 
         return ResponseEntity.ok(phrase);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Phrase>> searchPhrases(@RequestParam String searchText) {
+        List<Phrase> foundPhrases = this.phraseService.searchPhrases(searchText);
+        if (!foundPhrases.isEmpty()) {
+            return ResponseEntity.ok(foundPhrases);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 }
