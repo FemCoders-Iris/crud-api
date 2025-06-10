@@ -81,4 +81,8 @@ public class PhraseService {
         this.phraseRepository.save(existingPhrase);
         return existingPhrase;
     }
+
+    public List<Phrase> searchPhrases(String searchText) {
+        return  this.phraseRepository.findPhrasesBySearchText(searchText);
+    }
 }
