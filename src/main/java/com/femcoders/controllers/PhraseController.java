@@ -78,4 +78,18 @@ public class PhraseController {
         List<Phrase> phrases = this.phraseService.getAllOrderBy(orderCategory, orderDirection);
         return new ResponseEntity<>(phrases, HttpStatus.OK);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Phrase>> getPhrasesFilter(
+            @RequestParam(required=false)String title,
+            @RequestParam(required=false)String content,
+            @RequestParam(required=false)String topic,
+            @RequestParam(required=false)String author
+    ){
+        List<Phrase> phrases = this.phraseService.getAllFilter(title, content, topic, author);
+        if(phrases.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return new ResponseEntity<>(phrases, HttpStatus.OK);
+    }
 }
