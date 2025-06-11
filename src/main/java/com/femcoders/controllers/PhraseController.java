@@ -22,13 +22,13 @@ public class PhraseController {
         this.phraseService = phraseService;
     }
 
-    @JsonView(PhraseView.class)
+//    @JsonView(PhraseView.class)
     @PostMapping(path="/")
     public ResponseEntity<Object> createPhrase(@RequestBody Phrase phrase){
         return this.phraseService.newPhrase(phrase);
     }
 
-    @JsonView(PhraseView.class)
+//    @JsonView(PhraseView.class)
     @GetMapping("/")
     public ResponseEntity<List<Phrase>> getPhrases(){
         List<Phrase> phrases = this.phraseService.getPhrases();
