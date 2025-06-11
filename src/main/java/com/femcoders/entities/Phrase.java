@@ -1,7 +1,6 @@
 package com.femcoders.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -9,50 +8,53 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Entity
 @Table(name = "phrases")
 public class Phrase {
-    @JsonView({PhraseView.class, TopicView.class})
+//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @JsonView({PhraseView.class, TopicView.class})
+//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private String title;
 
-    @JsonView({PhraseView.class, TopicView.class})
+//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     @NotNull
     private String content;
 
-    @JsonView({PhraseView.class, TopicView.class})
+//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private String author;
 
-    @JsonView({PhraseView.class, TopicView.class})
+//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private LocalDateTime dateAdded;
 
-    @JsonView({PhraseView.class, TopicView.class})
+//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private LocalDateTime dateModified;
 
+
+
+//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class})
     @ManyToMany
-    @JsonView({PhraseView.class})
     @JoinTable(
     name="phrase_topic",
     joinColumns = @JoinColumn(name="id"),
     inverseJoinColumns = @JoinColumn(name="id_topic"))
-    Set<Topic> topicsInPhrase = new HashSet<>();
+    Set<Topic> topics = new HashSet<>();
 
     public Phrase() {}
 
-    public Phrase(String title, String content, String author, Set<Topic> topicsInPhrase) {
+    public Phrase(String title, String content, String author, Set<Topic> topics) {
         this.title = title;
         this.content = content;
         this.author = author;
-        this.topicsInPhrase = topicsInPhrase;
+        this.topics = topics;
     }
 
 
     public void addTopic(Topic topic){
-        this.topicsInPhrase.add(topic);
+        this.topics.add(topic);
     }
 
     public int getId() {
@@ -87,12 +89,12 @@ public class Phrase {
         this.author = author;
     }
 
-    public Set<Topic> getTopicsInPhrase() {
-        return topicsInPhrase;
+    public Set<Topic> getTopics() {
+        return topics;
     }
 
-    public void setTopicsInPhrase(Set<Topic> topicsInPhrase) {
-        this.topicsInPhrase = topicsInPhrase;
+    public void setTopics(Set<Topic> topics) {
+        this.topics = topics;
     }
 
     public LocalDateTime getDateAdded() {

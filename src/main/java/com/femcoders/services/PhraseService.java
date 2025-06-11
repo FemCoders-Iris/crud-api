@@ -36,11 +36,11 @@ public class PhraseService {
         phrase.setDateModified(LocalDateTime.now());
 
         Set<Topic> managedTopics = new HashSet<>();
-        for (Topic topic : phrase.getTopicsInPhrase()) {
+        for (Topic topic : phrase.getTopics()) {
             Topic savedTopic = this.topicService.saveTopic(topic); // Save and get managed entity
             managedTopics.add(savedTopic);
         }
-        phrase.setTopicsInPhrase(managedTopics);
+        phrase.setTopics(managedTopics);
 
         // Save the phrase after its topics are managed
         this.phraseRepository.save(phrase);
@@ -105,7 +105,7 @@ public class PhraseService {
     }
 
     public List<Phrase> searchPhrases(String searchText) {
-        return  this.phraseRepository.findPhrasesBySearchText(searchText);
+        return  this.phraseRepository.searchPhrases(searchText);
     }
 
     public List<Phrase> getAllOrderBy (String category, boolean direction){

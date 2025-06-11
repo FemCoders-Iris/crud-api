@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface TopicRepository extends JpaRepository<Topic, Integer> {
     Topic save(Topic topic);
 
-//    Optional<Topic> findByName(String name);
+    Optional<Topic> findByName(String name);
 }
