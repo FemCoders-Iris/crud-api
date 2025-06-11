@@ -1,4 +1,4 @@
-package com.femcoders.models;
+package com.femcoders.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
