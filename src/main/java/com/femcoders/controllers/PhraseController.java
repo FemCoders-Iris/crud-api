@@ -70,4 +70,12 @@ public class PhraseController {
             return ResponseEntity.noContent().build();
         }
     }
+
+    @GetMapping("/order")
+    public ResponseEntity<List<Phrase>> getPhrasesOrderBy(
+            @RequestParam(required=false, defaultValue ="id")String orderCategory,
+            @RequestParam(required=false, defaultValue="true")boolean orderDirection){
+        List<Phrase> phrases = this.phraseService.getAllOrderBy(orderCategory, orderDirection);
+        return new ResponseEntity<>(phrases, HttpStatus.OK);
+    }
 }

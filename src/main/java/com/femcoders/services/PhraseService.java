@@ -3,6 +3,7 @@ package com.femcoders.services;
 import com.femcoders.models.Phrase;
 import com.femcoders.repositories.PhraseRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -84,5 +85,12 @@ public class PhraseService {
 
     public List<Phrase> searchPhrases(String searchText) {
         return  this.phraseRepository.findPhrasesBySearchText(searchText);
+    }
+
+    public List<Phrase> getAllOrderBy (String category, boolean direction){
+        if(!direction){
+            return this.phraseRepository.findAll(Sort.by(Sort.Direction.DESC, category));
+        }
+        return this.phraseRepository.findAll(Sort.by(category));
     }
 }
