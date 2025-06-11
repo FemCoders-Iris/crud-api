@@ -1,12 +1,17 @@
 package com.femcoders.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.femcoders.entities.PhraseView;
+import com.femcoders.entities.Topic;
 import com.femcoders.services.PhraseService;
-import com.femcoders.models.Phrase;
+import com.femcoders.entities.Phrase;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping(value="/phrases")
@@ -17,11 +22,13 @@ public class PhraseController {
         this.phraseService = phraseService;
     }
 
-    @PostMapping("/")
+    @JsonView(PhraseView.class)
+    @PostMapping(path="/")
     public ResponseEntity<Object> createPhrase(@RequestBody Phrase phrase){
         return this.phraseService.newPhrase(phrase);
     }
 
+    @JsonView(PhraseView.class)
     @GetMapping("/")
     public ResponseEntity<List<Phrase>> getPhrases(){
         List<Phrase> phrases = this.phraseService.getPhrases();
@@ -83,10 +90,9 @@ public class PhraseController {
     public ResponseEntity<List<Phrase>> getPhrasesFilter(
             @RequestParam(required=false)String title,
             @RequestParam(required=false)String content,
-            @RequestParam(required=false)String topic,
             @RequestParam(required=false)String author
     ){
-        List<Phrase> phrases = this.phraseService.getAllFilter(title, content, topic, author);
+        List<Phrase> phrases = this.phraseService.getAllFilter(title, content, author);
         if(phrases.isEmpty()){
             return ResponseEntity.noContent().build();
         }
