@@ -1,8 +1,10 @@
 package com.femcoders.services;
 
-import com.femcoders.models.Phrase;
+import com.femcoders.entities.Phrase;
+import com.femcoders.entities.Topic;
 import com.femcoders.repositories.PhraseRepository;
 import com.femcoders.specifications.PhraseSpecifications;
+import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,23 +13,40 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 
 @Service
 public class PhraseService {
     private final PhraseRepository phraseRepository;
+    private final TopicService topicService;
 
-    public PhraseService(PhraseRepository phraseRepository) {
+    public PhraseService(PhraseRepository phraseRepository, TopicService topicService) {
         this.phraseRepository = phraseRepository;
+        this.topicService = topicService;
     }
 
+    @Transactional
     public ResponseEntity<Object> newPhrase(Phrase phrase) {
+        System.out.println("save topic");
         phrase.setDateAdded(LocalDateTime.now());
         phrase.setDateModified(LocalDateTime.now());
+
+        Set<Topic> managedTopics = new HashSet<>();
+        for (Topic topic : phrase.getTopicsInPhrase()) {
+            Topic savedTopic = this.topicService.saveTopic(topic); // Save and get managed entity
+            managedTopics.add(savedTopic);
+        }
+        phrase.setTopicsInPhrase(managedTopics);
+
+        // Save the phrase after its topics are managed
         this.phraseRepository.save(phrase);
         return new ResponseEntity<>(phrase, HttpStatus.CREATED);
     }
+
 
     public List<Phrase> getPhrases(){
         return this.phraseRepository.findAll();
@@ -76,9 +95,9 @@ public class PhraseService {
         if(!StringUtils.isEmpty(updatedPhrase.getTitle())){
             existingPhrase.setTitle(updatedPhrase.getTitle());
         }
-        if(!StringUtils.isEmpty(updatedPhrase.getTopic())){
-            existingPhrase.setTopic(updatedPhrase.getTopic());
-        }
+//        if(!StringUtils.isEmpty(updatedPhrase.getTopic())){
+//            existingPhrase.setTopic(updatedPhrase.getTopic());
+//        }
 
         existingPhrase.setDateModified(LocalDateTime.now());
         this.phraseRepository.save(existingPhrase);
@@ -96,8 +115,8 @@ public class PhraseService {
         return this.phraseRepository.findAll(Sort.by(category));
     }
 
-    public List<Phrase> getAllFilter(String title, String content, String topic, String author) {
-        Specification<Phrase> spec = PhraseSpecifications.filterByParams(title, content, topic, author);
+    public List<Phrase> getAllFilter(String title, String content, String author) {
+        Specification<Phrase> spec = PhraseSpecifications.filterByParams(title, content, author);
         return phraseRepository.findAll(spec);
     }
 
