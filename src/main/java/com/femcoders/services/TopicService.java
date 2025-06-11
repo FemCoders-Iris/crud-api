@@ -1,5 +1,8 @@
 package com.femcoders.services;
 
+import com.femcoders.dtos.PhraseDTO;
+import com.femcoders.dtos.TopicDTO;
+import com.femcoders.entities.Phrase;
 import com.femcoders.entities.Topic;
 import com.femcoders.repositories.TopicRepository;
 import org.springframework.stereotype.Service;
@@ -28,11 +31,16 @@ public class TopicService {
 
     }
 
-    public List<Topic> getTopics(){
-        return this.topicRepository.findAll();
+    public List<TopicDTO> getTopics() {
+        List<Topic> topics = this.topicRepository.findAll();
+
+//        if (phrases.isEmpty()){
+//        throw new EmptyListException();
+//    }
+        return topics.stream()
+                .map(topic -> TopicDTO.topicDTOComplete(topic))
+                .toList();
     }
-
-
 //    public  Topic findByName(String name){
 //        Optional<Topic> isExisting = this.topicRepository.findByName(name);
 //
