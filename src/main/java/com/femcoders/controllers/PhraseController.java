@@ -70,4 +70,26 @@ public class PhraseController {
             return ResponseEntity.noContent().build();
         }
     }
+
+    @GetMapping("/order")
+    public ResponseEntity<List<Phrase>> getPhrasesOrderBy(
+            @RequestParam(required=false, defaultValue ="id")String orderCategory,
+            @RequestParam(required=false, defaultValue="true")boolean orderDirection){
+        List<Phrase> phrases = this.phraseService.getAllOrderBy(orderCategory, orderDirection);
+        return new ResponseEntity<>(phrases, HttpStatus.OK);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Phrase>> getPhrasesFilter(
+            @RequestParam(required=false)String title,
+            @RequestParam(required=false)String content,
+            @RequestParam(required=false)String topic,
+            @RequestParam(required=false)String author
+    ){
+        List<Phrase> phrases = this.phraseService.getAllFilter(title, content, topic, author);
+        if(phrases.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return new ResponseEntity<>(phrases, HttpStatus.OK);
+    }
 }
