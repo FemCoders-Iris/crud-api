@@ -21,13 +21,17 @@ public class AuthorDTO {
 
     public static AuthorDTO objectToAuthorDTO(Author author){
         List<String> phrasesInDTO = new ArrayList<>();
-        for(Phrase phrase: author.getPhrases()){
-            phrasesInDTO.add(phrase.getContent());
-        }
         AuthorDTO authorDTO = new AuthorDTO();
+        if(author.getPhrases()!= null){
+            for(Phrase phrase: author.getPhrases()){
+                phrasesInDTO.add(phrase.getContent());
+            }
+                authorDTO.setPhrases(phrasesInDTO);
+        }
+
         authorDTO.setId(author.getId());
         authorDTO.setName(author.getName());
-        authorDTO.setPhrases(phrasesInDTO);
+
         return authorDTO;
     }
 
