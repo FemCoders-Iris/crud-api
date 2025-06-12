@@ -86,7 +86,7 @@ public class PhraseService {
         }
 
         Phrase existingPhrase = phraseOptional.get();
-        if(!StringUtils.isEmpty(updatedPhrase.getAuthor())){
+        if(!StringUtils.isEmpty(updatedPhrase.getAuthor().getName())){
             existingPhrase.setAuthor(updatedPhrase.getAuthor());
         }
         if(!StringUtils.isEmpty(updatedPhrase.getContent())){
