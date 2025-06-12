@@ -1,10 +1,6 @@
 package com.femcoders.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.femcoders.dtos.TopicDTO;
-import com.femcoders.entities.PhraseView;
-import com.femcoders.entities.Topic;
-import com.femcoders.entities.TopicView;
 import com.femcoders.services.TopicService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

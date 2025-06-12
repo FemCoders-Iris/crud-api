@@ -6,7 +6,6 @@ import com.femcoders.entities.Topic;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class PhraseDTO {
     private int id;
@@ -28,7 +27,6 @@ public class PhraseDTO {
         List<Topic> topics = new ArrayList<>();
         for(String topicName: phraseDTO.getTopics()){
             System.out.println(topicName);
-            //search if topic exists
             Topic topic = new Topic();
             topic.setName(topicName);
             topics.add(topic);

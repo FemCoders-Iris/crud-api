@@ -1,43 +1,31 @@
 package com.femcoders.entities;
 
-import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+
 @Entity
 @Table(name = "phrases")
 public class Phrase {
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private String title;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     @NotNull
     private String content;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private String author;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private LocalDateTime dateAdded;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private LocalDateTime dateModified;
 
-
-
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class})
     @ManyToMany
     @JoinTable(
     name="phrase_topic",
@@ -53,7 +41,6 @@ public class Phrase {
         this.author = author;
         this.topics = topics;
     }
-
 
     public void addTopic(Topic topic){
         this.topics.add(topic);

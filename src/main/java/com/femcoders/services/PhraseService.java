@@ -10,8 +10,6 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,7 +26,7 @@ public class PhraseService {
         this.topicService = topicService;
     }
 
-    @Transactional
+//    @Transactional
     public Phrase newPhrase(PhraseDTO phraseDTO) {
         Optional<Phrase> isExisting = this.phraseRepository.findByContent(phraseDTO.getContent());
         if(isExisting.isPresent()){
