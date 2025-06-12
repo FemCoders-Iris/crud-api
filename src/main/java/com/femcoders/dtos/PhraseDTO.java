@@ -27,6 +27,7 @@ public class PhraseDTO {
         Author author = new Author();
         author.setName(phraseDTO.getAuthor());
         phrase.setAuthor(author);
+        phrase.setDateAdded(phraseDTO.getDateAdded());
         List<Topic> topics = new ArrayList<>();
         for(String topicName: phraseDTO.getTopics()){
             System.out.println(topicName);

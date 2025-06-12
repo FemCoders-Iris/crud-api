@@ -8,8 +8,6 @@ import com.femcoders.entities.Phrase;
 import com.femcoders.entities.Topic;
 import com.femcoders.repositories.PhraseRepository;
 import com.femcoders.specifications.PhraseSpecifications;
-import jakarta.transaction.Transactional;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -93,29 +91,36 @@ public class PhraseService {
             return null;
         }
 
-        Phrase phrase = phraseOptional.get();
+        Phrase phraseToUpdate = phraseOptional.get();
 
-        Phrase newPhrase = PhraseDTO.phraseDTOToObject(updatedPhraseDTO);
+        Phrase newInfo = PhraseDTO.phraseDTOToObject(updatedPhraseDTO);
 
-        phrase.setDateModified(LocalDateTime.now());
 
-        if(!StringUtils.isEmpty(newPhrase.getAuthor().getName())) {
-            AuthorDTO authorDTO = AuthorDTO.objectToAuthorDTO(newPhrase.getAuthor());
-            Author savedAuthor = this.authorService.saveAuthor(authorDTO);
-            phrase.setAuthor(savedAuthor);
-        }
+
+        phraseToUpdate.setDateModified(LocalDateTime.now());
+
+        phraseToUpdate.setTitle(newInfo.getTitle());
+        phraseToUpdate.setContent(newInfo.getContent());
+        phraseToUpdate.setAuthor(newInfo.getAuthor());
+
+        System.out.println("AUTHOR" + newInfo.getAuthor());
+
+        AuthorDTO authorDTO = AuthorDTO.objectToAuthorDTO(newInfo.getAuthor());
+        Author savedAuthor = this.authorService.saveAuthor(authorDTO);
+        phraseToUpdate.setAuthor(savedAuthor);
+
 
         List<Topic> managedTopics = new ArrayList<>();
-        if(phrase.getTopics() != null && !phrase.getTopics().isEmpty()) {
-            for (Topic topic : phrase.getTopics()) {
-                TopicDTO topicDTO = TopicDTO.objectToTopicDTO(topic);
-                Topic savedTopic = this.topicService.saveTopic(topicDTO);
-                managedTopics.add(savedTopic);
-            }
-        }
-        phrase.setTopics(managedTopics);
 
-        return this.phraseRepository.save(phrase);
+        for (Topic topic : newInfo.getTopics()) {
+            TopicDTO topicDTO = TopicDTO.objectToTopicDTO(topic);
+            Topic savedTopic = this.topicService.saveTopic(topicDTO);
+            managedTopics.add(savedTopic);
+        }
+
+        phraseToUpdate.setTopics(managedTopics);
+
+        return this.phraseRepository.save(phraseToUpdate);
 
 
 
