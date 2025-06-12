@@ -24,7 +24,7 @@ public class Topic {
 
 
 //    @JsonView({TopicView.class})
-    @JsonBackReference
+//    @JsonBackReference
     @ManyToMany(mappedBy = "topics")
     List<Phrase> phrasesInTopic = new ArrayList<>();
 

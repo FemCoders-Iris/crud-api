@@ -1,5 +1,7 @@
 package com.femcoders.services;
 
+import com.femcoders.dtos.PhraseDTO;
+import com.femcoders.dtos.TopicDTO;
 import com.femcoders.entities.Phrase;
 import com.femcoders.entities.Topic;
 import com.femcoders.repositories.PhraseRepository;
@@ -13,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -30,21 +29,26 @@ public class PhraseService {
     }
 
     @Transactional
-    public ResponseEntity<Object> newPhrase(Phrase phrase) {
-        System.out.println("save topic");
+    public Phrase newPhrase(PhraseDTO phraseDTO) {
+        Optional<Phrase> isExisting = this.phraseRepository.findByContent(phraseDTO.getContent());
+        if(isExisting.isPresent()){
+            return isExisting.get();
+        }
+
+        Phrase phrase = PhraseDTO.phraseDTOToObject(phraseDTO);
+
         phrase.setDateAdded(LocalDateTime.now());
         phrase.setDateModified(LocalDateTime.now());
 
-        Set<Topic> managedTopics = new HashSet<>();
-        for (Topic topic : phrase.getTopics()) {
-            Topic savedTopic = this.topicService.saveTopic(topic); // Save and get managed entity
+        List<Topic> managedTopics = new ArrayList<>();
+        for (Topic topic: phrase.getTopics()) {
+            TopicDTO topicDTO = TopicDTO.objectToTopicDTO(topic);
+            Topic savedTopic = this.topicService.saveTopic(topicDTO);
             managedTopics.add(savedTopic);
         }
         phrase.setTopics(managedTopics);
 
-        // Save the phrase after its topics are managed
-        this.phraseRepository.save(phrase);
-        return new ResponseEntity<>(phrase, HttpStatus.CREATED);
+        return this.phraseRepository.save(phrase);
     }
 
 
@@ -59,9 +63,7 @@ public class PhraseService {
             return null;
         }
 
-        Phrase phrase = phraseOptional.get();
-
-        return phrase;
+        return phraseOptional.get();
     }
 
     public Phrase deletePhraseById(Integer id){

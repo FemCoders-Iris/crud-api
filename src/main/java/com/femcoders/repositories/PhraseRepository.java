@@ -1,6 +1,7 @@
 package com.femcoders.repositories;
 
 import com.femcoders.entities.Phrase;
+import com.femcoders.entities.Topic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PhraseRepository extends JpaRepository<Phrase, Integer>, JpaSpecificationExecutor<Phrase> {
@@ -26,6 +28,8 @@ public interface PhraseRepository extends JpaRepository<Phrase, Integer>, JpaSpe
             "OR LOWER(t.name) LIKE LOWER(CONCAT('%', :searchText, '%'))",
             nativeQuery = true)
     List<Phrase> searchPhrases(@Param("searchText") String searchText);
+
+    Optional<Phrase> findByContent(String name);
 
 
 }

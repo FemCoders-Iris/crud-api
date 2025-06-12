@@ -9,32 +9,27 @@ import java.util.List;
 public class TopicDTO {
     private int id_topic;
     private String name;
-    private List<PhraseDTOShort> phrases;
+    private List<String> phrases;
 
-    public TopicDTO(){}
+    public TopicDTO(){
 
-    public TopicDTO(int id_topic, String name) {
-        this.id_topic = id_topic;
-        this.name = name;
     }
 
-    public TopicDTO(int id_topic, String name, List<PhraseDTOShort> phrases) {
-        this.id_topic = id_topic;
-        this.name = name;
-        this.phrases = phrases;
+    public static Topic topicDTOToObject(TopicDTO topicDTO) {
+        Topic topic = new Topic();
+        topic.setName(topicDTO.getName());
+        return topic;
     }
 
-    public static TopicDTO topicDTOComplete(Topic topic){
-        List<PhraseDTOShort> phrases = new ArrayList<>();
+    public static TopicDTO objectToTopicDTO(Topic topic){
+        List<String> phrasesInDTO = new ArrayList<>();
         for(Phrase phrase: topic.getPhrasesInTopic()){
-            List<String> topics = new ArrayList<>();
-            for(Topic topicInPhrase: phrase.getTopics()){
-                topics.add(topicInPhrase.getName());
-            }
-            PhraseDTOShort phraseDTO = new PhraseDTOShort(phrase.getId(), phrase.getTitle(), phrase.getContent(), topics);
-            phrases.add(phraseDTO);
+            phrasesInDTO.add(phrase.getContent());
         }
-        TopicDTO topicDTO = new TopicDTO(topic.getId_topic(), topic.getName(), phrases);
+        TopicDTO topicDTO = new TopicDTO();
+        topicDTO.setId_topic(topic.getId_topic());
+        topicDTO.setName(topic.getName());
+        topicDTO.setPhrases(phrasesInDTO);
         return topicDTO;
     }
 
@@ -54,11 +49,11 @@ public class TopicDTO {
         this.name = name;
     }
 
-    public List<PhraseDTOShort> getPhrases() {
+    public List<String> getPhrases() {
         return phrases;
     }
 
-    public void setPhrases(List<PhraseDTOShort> phrases) {
+    public void setPhrases(List<String> phrases) {
         this.phrases = phrases;
     }
 }

@@ -1,6 +1,7 @@
 package com.femcoders.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.femcoders.dtos.PhraseDTO;
 import com.femcoders.entities.PhraseView;
 import com.femcoders.entities.Topic;
 import com.femcoders.services.PhraseService;
@@ -22,28 +23,32 @@ public class PhraseController {
         this.phraseService = phraseService;
     }
 
-//    @JsonView(PhraseView.class)
+//    @PostMapping(path="/")
+//    public ResponseEntity<Object> createPhrase(@RequestBody Phrase phrase){
+//        return new ResponseEntity<>(this.phraseService.newPhrase(phrase), HttpStatus.CREATED);
+//    }
+
     @PostMapping(path="/")
-    public ResponseEntity<Object> createPhrase(@RequestBody Phrase phrase){
-        return this.phraseService.newPhrase(phrase);
+    public ResponseEntity<PhraseDTO> createPhrase(@RequestBody PhraseDTO phraseDTO){
+        Phrase phrase = this.phraseService.newPhrase(phraseDTO);
+        return new ResponseEntity<>(phraseToDTO(phrase), HttpStatus.CREATED);
     }
 
-//    @JsonView(PhraseView.class)
     @GetMapping("/")
-    public ResponseEntity<List<Phrase>> getPhrases(){
+    public ResponseEntity<List<PhraseDTO>> getPhrases(){
         List<Phrase> phrases = this.phraseService.getPhrases();
-        return new ResponseEntity<>(phrases, HttpStatus.OK);
+        return new ResponseEntity<>(listPhraseToDTO(phrases), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getPhraseById(@PathVariable Integer id ){
+    public ResponseEntity<PhraseDTO> getPhraseById(@PathVariable Integer id ){
         Phrase phrase = this.phraseService.getPhraseById(id);
 
         if (phrase == null){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(phrase);
+        return ResponseEntity.ok(phraseToDTO(phrase));
     }
 
     @DeleteMapping("/{id}")
@@ -97,5 +102,15 @@ public class PhraseController {
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>(phrases, HttpStatus.OK);
+    }
+
+    public PhraseDTO phraseToDTO(Phrase phrase){
+        return PhraseDTO.objectToPhraseDTO(phrase);
+    }
+
+    public List<PhraseDTO> listPhraseToDTO(List<Phrase> phrases){
+        return phrases.stream()
+                .map(phrase -> PhraseDTO.objectToPhraseDTO(phrase))
+                .toList();
     }
 }

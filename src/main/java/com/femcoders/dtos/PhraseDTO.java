@@ -3,38 +3,54 @@ package com.femcoders.dtos;
 import com.femcoders.entities.Phrase;
 import com.femcoders.entities.Topic;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PhraseDTO {
     private int id;
     private String title;
     private String content;
-    private List<TopicDTO> topics;
+    private String author;
+    private List<String> topics;
+    private LocalDateTime dateAdded;
+    private LocalDateTime dateModified;
 
     public PhraseDTO() {
     }
 
-    public PhraseDTO(int id, String title, String content, List<TopicDTO> topics) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.topics = topics;
-    }
-
-    public PhraseDTO(int id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
-
-    public PhraseDTO phraseDTOComplete(Phrase phrase) {
-        List<TopicDTO> topics = new ArrayList<>();
-        for(Topic topic: phrase.getTopics()){
-            TopicDTO topicDTO = new TopicDTO(topic.getId_topic(), topic.getName());
-            topics.add(topicDTO);
+    public static Phrase phraseDTOToObject(PhraseDTO phraseDTO) {
+        Phrase phrase = new Phrase();
+        phrase.setTitle(phraseDTO.getTitle());
+        phrase.setContent(phraseDTO.getContent());
+        phrase.setAuthor(phraseDTO.getAuthor());
+        List<Topic> topics = new ArrayList<>();
+        for(String topicName: phraseDTO.getTopics()){
+            System.out.println(topicName);
+            //search if topic exists
+            Topic topic = new Topic();
+            topic.setName(topicName);
+            topics.add(topic);
         }
-        return new PhraseDTO(phrase.getId(), phrase.getTitle(), phrase.getContent(), topics);
+        phrase.setTopics(topics);
+        return phrase;
+    }
+
+    public static PhraseDTO objectToPhraseDTO(Phrase phrase) {
+        PhraseDTO phraseDTO = new PhraseDTO();
+        phraseDTO.setId(phrase.getId());
+        phraseDTO.setTitle(phrase.getTitle());
+        phraseDTO.setContent(phrase.getContent());
+        phraseDTO.setAuthor(phrase.getAuthor());
+        phraseDTO.setDateAdded(phrase.getDateAdded());
+        phraseDTO.setDateModified(phrase.getDateModified());
+        List<String> topicsName = new ArrayList<>();
+        for(Topic topic: phrase.getTopics()){
+            topicsName.add(topic.getName());
+        }
+        phraseDTO.setTopics(topicsName);
+        return phraseDTO;
     }
 
     public int getId() {
@@ -61,11 +77,35 @@ public class PhraseDTO {
         this.content = content;
     }
 
-    public List<TopicDTO> getTopics() {
+    public List<String> getTopics() {
         return topics;
     }
 
-    public void setTopics(List<TopicDTO> topics) {
+    public void setTopics(List<String> topics) {
         this.topics = topics;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public LocalDateTime getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(LocalDateTime dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
+    public LocalDateTime getDateModified() {
+        return dateModified;
+    }
+
+    public void setDateModified(LocalDateTime dateModified) {
+        this.dateModified = dateModified;
     }
 }
