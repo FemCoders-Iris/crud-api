@@ -98,6 +98,8 @@ public class PhraseService {
         Phrase newPhrase = PhraseDTO.phraseDTOToObject(updatedPhraseDTO);
 
         phrase.setDateModified(LocalDateTime.now());
+        phrase.setTitle(newPhrase.getTitle());
+        phrase.setContent(newPhrase.getContent());
 
         if(!StringUtils.isEmpty(newPhrase.getAuthor().getName())) {
             AuthorDTO authorDTO = AuthorDTO.objectToAuthorDTO(newPhrase.getAuthor());
