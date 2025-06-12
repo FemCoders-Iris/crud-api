@@ -59,7 +59,7 @@ public class PhraseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PhraseDTO> updatePhraseById(@PathVariable Integer id, @RequestBody Phrase updatedPhrase ){
+    public ResponseEntity<PhraseDTO> updatePhraseById(@PathVariable Integer id, @RequestBody PhraseDTO updatedPhrase ){
         Phrase phrase = this.phraseService.updatePhrase(id, updatedPhrase);
 
         if (phrase == null){

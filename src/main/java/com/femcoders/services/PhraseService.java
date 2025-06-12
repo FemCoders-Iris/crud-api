@@ -85,7 +85,7 @@ public class PhraseService {
         return phrase;
     }
 
-    public Phrase updatePhrase(Integer id, Phrase updatedPhrase){
+    public Phrase updatePhrase(Integer id, PhraseDTO updatedPhraseDTO){
         Optional<Phrase> phraseOptional = this.phraseRepository.findById(id);
 
         //validate number of characters
@@ -93,23 +93,50 @@ public class PhraseService {
             return null;
         }
 
-        Phrase existingPhrase = phraseOptional.get();
-        if(!StringUtils.isEmpty(updatedPhrase.getAuthor().getName())){
-            existingPhrase.setAuthor(updatedPhrase.getAuthor());
-        }
-        if(!StringUtils.isEmpty(updatedPhrase.getContent())){
-            existingPhrase.setContent(updatedPhrase.getContent());
-        }
-        if(!StringUtils.isEmpty(updatedPhrase.getTitle())){
-            existingPhrase.setTitle(updatedPhrase.getTitle());
-        }
-//        if(!StringUtils.isEmpty(updatedPhrase.getTopic())){
-//            existingPhrase.setTopic(updatedPhrase.getTopic());
-//        }
+        Phrase phrase = phraseOptional.get();
 
-        existingPhrase.setDateModified(LocalDateTime.now());
-        this.phraseRepository.save(existingPhrase);
-        return existingPhrase;
+        Phrase newPhrase = PhraseDTO.phraseDTOToObject(updatedPhraseDTO);
+
+        phrase.setDateModified(LocalDateTime.now());
+
+        if(!StringUtils.isEmpty(newPhrase.getAuthor().getName())) {
+            AuthorDTO authorDTO = AuthorDTO.objectToAuthorDTO(newPhrase.getAuthor());
+            Author savedAuthor = this.authorService.saveAuthor(authorDTO);
+            phrase.setAuthor(savedAuthor);
+        }
+
+        List<Topic> managedTopics = new ArrayList<>();
+        if(phrase.getTopics() != null && !phrase.getTopics().isEmpty()) {
+            for (Topic topic : phrase.getTopics()) {
+                TopicDTO topicDTO = TopicDTO.objectToTopicDTO(topic);
+                Topic savedTopic = this.topicService.saveTopic(topicDTO);
+                managedTopics.add(savedTopic);
+            }
+        }
+        phrase.setTopics(managedTopics);
+
+        return this.phraseRepository.save(phrase);
+
+
+
+
+//        Phrase existingPhrase = phraseOptional.get();
+//        if(!StringUtils.isEmpty(updatedPhrase.getAuthor().getName())){
+//            existingPhrase.setAuthor(updatedPhrase.getAuthor());
+//        }
+//        if(!StringUtils.isEmpty(updatedPhrase.getContent())){
+//            existingPhrase.setContent(updatedPhrase.getContent());
+//        }
+//        if(!StringUtils.isEmpty(updatedPhrase.getTitle())){
+//            existingPhrase.setTitle(updatedPhrase.getTitle());
+//        }
+////        if(!StringUtils.isEmpty(updatedPhrase.getTopic())){
+////            existingPhrase.setTopic(updatedPhrase.getTopic());
+////        }
+//
+//        existingPhrase.setDateModified(LocalDateTime.now());
+//        this.phraseRepository.save(existingPhrase);
+//        return existingPhrase;
     }
 
     public List<Phrase> searchPhrases(String searchText) {
