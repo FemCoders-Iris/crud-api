@@ -1,7 +1,9 @@
 package com.femcoders.services;
 
+import com.femcoders.dtos.AuthorDTO;
 import com.femcoders.dtos.PhraseDTO;
 import com.femcoders.dtos.TopicDTO;
+import com.femcoders.entities.Author;
 import com.femcoders.entities.Phrase;
 import com.femcoders.entities.Topic;
 import com.femcoders.repositories.PhraseRepository;
@@ -20,10 +22,12 @@ import java.util.*;
 public class PhraseService {
     private final PhraseRepository phraseRepository;
     private final TopicService topicService;
+    private final AuthorService authorService;
 
-    public PhraseService(PhraseRepository phraseRepository, TopicService topicService) {
+    public PhraseService(PhraseRepository phraseRepository, TopicService topicService, AuthorService authorService) {
         this.phraseRepository = phraseRepository;
         this.topicService = topicService;
+        this.authorService = authorService;
     }
 
 //    @Transactional
@@ -37,6 +41,10 @@ public class PhraseService {
 
         phrase.setDateAdded(LocalDateTime.now());
         phrase.setDateModified(LocalDateTime.now());
+
+        AuthorDTO authorDTO = AuthorDTO.objectToAuthorDTO(phrase.getAuthor());
+        Author savedAuthor = this.authorService.saveAuthor(authorDTO);
+        phrase.setAuthor(savedAuthor);
 
         List<Topic> managedTopics = new ArrayList<>();
         for (Topic topic: phrase.getTopics()) {
@@ -86,7 +94,7 @@ public class PhraseService {
         }
 
         Phrase existingPhrase = phraseOptional.get();
-        if(!StringUtils.isEmpty(updatedPhrase.getAuthor())){
+        if(!StringUtils.isEmpty(updatedPhrase.getAuthor().getName())){
             existingPhrase.setAuthor(updatedPhrase.getAuthor());
         }
         if(!StringUtils.isEmpty(updatedPhrase.getContent())){

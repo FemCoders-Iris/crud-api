@@ -20,7 +20,9 @@ public class Phrase {
     @NotNull
     private String content;
 
-    private String author;
+    @ManyToOne
+    @JoinColumn(name="author_id", nullable = false)
+    private Author author;
 
     private LocalDateTime dateAdded;
 
@@ -35,7 +37,7 @@ public class Phrase {
 
     public Phrase() {}
 
-    public Phrase(String title, String content, String author, List<Topic> topics) {
+    public Phrase(String title, String content, Author author, List<Topic> topics) {
         this.title = title;
         this.content = content;
         this.author = author;
@@ -70,11 +72,11 @@ public class Phrase {
         this.content = content;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 

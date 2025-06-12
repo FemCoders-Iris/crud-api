@@ -1,5 +1,6 @@
 package com.femcoders.dtos;
 
+import com.femcoders.entities.Author;
 import com.femcoders.entities.Phrase;
 import com.femcoders.entities.Topic;
 
@@ -23,7 +24,9 @@ public class PhraseDTO {
         Phrase phrase = new Phrase();
         phrase.setTitle(phraseDTO.getTitle());
         phrase.setContent(phraseDTO.getContent());
-        phrase.setAuthor(phraseDTO.getAuthor());
+        Author author = new Author();
+        author.setName(phraseDTO.getAuthor());
+        phrase.setAuthor(author);
         List<Topic> topics = new ArrayList<>();
         for(String topicName: phraseDTO.getTopics()){
             System.out.println(topicName);
@@ -40,7 +43,7 @@ public class PhraseDTO {
         phraseDTO.setId(phrase.getId());
         phraseDTO.setTitle(phrase.getTitle());
         phraseDTO.setContent(phrase.getContent());
-        phraseDTO.setAuthor(phrase.getAuthor());
+        phraseDTO.setAuthor(phrase.getAuthor().getName());
         phraseDTO.setDateAdded(phrase.getDateAdded());
         phraseDTO.setDateModified(phrase.getDateModified());
         List<String> topicsName = new ArrayList<>();
