@@ -32,10 +32,7 @@ public class PhraseService {
 
 //    @Transactional
     public Phrase newPhrase(PhraseDTO phraseDTO) {
-        Optional<Phrase> isExisting = this.phraseRepository.findByContent(phraseDTO.getContent());
-        if(isExisting.isPresent()){
-            return isExisting.get();
-        }
+
 
         Phrase phrase = PhraseDTO.phraseDTOToObject(phraseDTO);
 
@@ -57,6 +54,9 @@ public class PhraseService {
         return this.phraseRepository.save(phrase);
     }
 
+    public Optional<Phrase> getPhraseByContent(String content){
+        return this.phraseRepository.findByContent(content);
+    }
 
     public List<Phrase> getPhrases(){
         return this.phraseRepository.findAll();
