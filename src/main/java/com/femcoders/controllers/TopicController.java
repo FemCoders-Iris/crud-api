@@ -35,6 +35,16 @@ public class TopicController {
         return new ResponseEntity<>(topicToDTO(topic), HttpStatus.CREATED);
     }
 
+    @PutMapping(path="/{id}")
+    public ResponseEntity<Object> updateTopic(@PathVariable Integer id, @RequestBody TopicDTO topicDTO){
+        Optional<Topic> isExisting = this.topicService.findById(id);
+        if(!isExisting.isPresent()){
+            return new ResponseEntity<>(topicToDTO(isExisting.get()), HttpStatus.NOT_FOUND);
+        }
+        Topic topic = this.topicService.updateTopic(id, topicDTO);
+        return new ResponseEntity<>(topicToDTO(topic), HttpStatus.CREATED);
+    }
+
     public TopicDTO topicToDTO(Topic topic){
         return TopicDTO.objectToTopicDTO(topic);
     }

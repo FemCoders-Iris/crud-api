@@ -19,7 +19,6 @@ public class TopicService {
 
     public Topic saveTopic(TopicDTO topicDTO){
         Optional<Topic> isExisting = this.topicRepository.findByName(topicDTO.getName());
-        System.out.println("saving TOPIC");
         return isExisting.orElseGet(() -> this.topicRepository.save(TopicDTO.topicDTOToObject(topicDTO)));
     }
 
@@ -32,6 +31,17 @@ public class TopicService {
         return topics.stream()
                 .map(topic -> TopicDTO.objectToTopicDTO(topic))
                 .toList();
+    }
+
+    public Topic updateTopic(Integer id, TopicDTO topicDTO){
+        Optional<Topic> isExisting = this.topicRepository.findById(id);
+        Topic newTopic = isExisting.get();
+        newTopic.setName(topicDTO.getName());
+        return newTopic;
+    }
+
+    public Optional<Topic> findById(Integer id){
+        return this.topicRepository.findById(id);
     }
 
     public Optional<Topic> findByName(String name){
