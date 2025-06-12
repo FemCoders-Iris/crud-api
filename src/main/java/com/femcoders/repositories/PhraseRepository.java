@@ -17,9 +17,10 @@ public interface PhraseRepository extends JpaRepository<Phrase, Integer>, JpaSpe
     @Query(value = "SELECT p.* FROM phrases p " +
             "LEFT JOIN phrase_topic pt ON p.id = pt.id " +
             "LEFT JOIN topics t ON pt.id_topic = t.id_topic " +
+            "LEFT JOIN authors a ON a.id = p.author_id " +
             "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
             "OR LOWER(p.content) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
-            "OR LOWER(p.author) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
+            "OR LOWER(a.name) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
             "OR LOWER(t.name) LIKE LOWER(CONCAT('%', :searchText, '%'))",
             nativeQuery = true)
     List<Phrase> searchPhrases(@Param("searchText") String searchText);
