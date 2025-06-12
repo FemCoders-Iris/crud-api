@@ -59,36 +59,36 @@ public class PhraseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updatePhraseById(@PathVariable Integer id, @RequestBody Phrase updatedPhrase ){
+    public ResponseEntity<PhraseDTO> updatePhraseById(@PathVariable Integer id, @RequestBody PhraseDTO updatedPhrase ){
         Phrase phrase = this.phraseService.updatePhrase(id, updatedPhrase);
 
         if (phrase == null){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(phrase);
+        return ResponseEntity.ok(phraseToDTO(phrase));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Phrase>> searchPhrases(@RequestParam String searchText) {
+    public ResponseEntity<List<PhraseDTO>> searchPhrases(@RequestParam String searchText) {
         List<Phrase> foundPhrases = this.phraseService.searchPhrases(searchText);
         if (!foundPhrases.isEmpty()) {
-            return ResponseEntity.ok(foundPhrases);
+            return ResponseEntity.ok(listPhraseToDTO(foundPhrases));
         } else {
             return ResponseEntity.noContent().build();
         }
     }
 
     @GetMapping("/order")
-    public ResponseEntity<List<Phrase>> getPhrasesOrderBy(
+    public ResponseEntity<List<PhraseDTO>> getPhrasesOrderBy(
             @RequestParam(required=false, defaultValue ="id")String orderCategory,
             @RequestParam(required=false, defaultValue="true")boolean orderDirection){
         List<Phrase> phrases = this.phraseService.getAllOrderBy(orderCategory, orderDirection);
-        return new ResponseEntity<>(phrases, HttpStatus.OK);
+        return new ResponseEntity<>(listPhraseToDTO(phrases), HttpStatus.OK);
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Phrase>> getPhrasesFilter(
+    public ResponseEntity<List<PhraseDTO>> getPhrasesFilter(
             @RequestParam(required=false)String title,
             @RequestParam(required=false)String content,
             @RequestParam(required=false)String author
@@ -97,7 +97,7 @@ public class PhraseController {
         if(phrases.isEmpty()){
             return ResponseEntity.noContent().build();
         }
-        return new ResponseEntity<>(phrases, HttpStatus.OK);
+        return new ResponseEntity<>(listPhraseToDTO(phrases), HttpStatus.OK);
     }
 
     public PhraseDTO phraseToDTO(Phrase phrase){
