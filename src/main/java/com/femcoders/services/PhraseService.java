@@ -32,10 +32,7 @@ public class PhraseService {
 
 //    @Transactional
     public Phrase newPhrase(PhraseDTO phraseDTO) {
-        Optional<Phrase> isExisting = this.phraseRepository.findByContent(phraseDTO.getContent());
-        if(isExisting.isPresent()){
-            return isExisting.get();
-        }
+
 
         Phrase phrase = PhraseDTO.phraseDTOToObject(phraseDTO);
 
@@ -57,6 +54,9 @@ public class PhraseService {
         return this.phraseRepository.save(phrase);
     }
 
+    public Optional<Phrase> getPhraseByContent(String content){
+        return this.phraseRepository.findByContent(content);
+    }
 
     public List<Phrase> getPhrases(){
         return this.phraseRepository.findAll();
@@ -88,7 +88,6 @@ public class PhraseService {
     public Phrase updatePhrase(Integer id, PhraseDTO updatedPhraseDTO){
         Optional<Phrase> phraseOptional = this.phraseRepository.findById(id);
 
-        //validate number of characters
         if(!phraseOptional.isPresent()){
             return null;
         }
@@ -98,8 +97,15 @@ public class PhraseService {
         Phrase newPhrase = PhraseDTO.phraseDTOToObject(updatedPhraseDTO);
 
         phrase.setDateModified(LocalDateTime.now());
-        phrase.setTitle(newPhrase.getTitle());
-        phrase.setContent(newPhrase.getContent());
+
+        if(!StringUtils.isEmpty(newPhrase.getTitle())){
+            phrase.setTitle(newPhrase.getTitle());
+        }
+
+        if(!StringUtils.isEmpty(newPhrase.getContent())){
+            phrase.setContent(newPhrase.getContent());
+        }
+
 
         if(!StringUtils.isEmpty(newPhrase.getAuthor().getName())) {
             AuthorDTO authorDTO = AuthorDTO.objectToAuthorDTO(newPhrase.getAuthor());
@@ -108,8 +114,8 @@ public class PhraseService {
         }
 
         List<Topic> managedTopics = new ArrayList<>();
-        if(phrase.getTopics() != null && !phrase.getTopics().isEmpty()) {
-            for (Topic topic : phrase.getTopics()) {
+        if(newPhrase.getTopics() != null && !newPhrase.getTopics().isEmpty()) {
+            for (Topic topic : newPhrase.getTopics()) {
                 TopicDTO topicDTO = TopicDTO.objectToTopicDTO(topic);
                 Topic savedTopic = this.topicService.saveTopic(topicDTO);
                 managedTopics.add(savedTopic);
@@ -118,27 +124,6 @@ public class PhraseService {
         phrase.setTopics(managedTopics);
 
         return this.phraseRepository.save(phrase);
-
-
-
-
-//        Phrase existingPhrase = phraseOptional.get();
-//        if(!StringUtils.isEmpty(updatedPhrase.getAuthor().getName())){
-//            existingPhrase.setAuthor(updatedPhrase.getAuthor());
-//        }
-//        if(!StringUtils.isEmpty(updatedPhrase.getContent())){
-//            existingPhrase.setContent(updatedPhrase.getContent());
-//        }
-//        if(!StringUtils.isEmpty(updatedPhrase.getTitle())){
-//            existingPhrase.setTitle(updatedPhrase.getTitle());
-//        }
-////        if(!StringUtils.isEmpty(updatedPhrase.getTopic())){
-////            existingPhrase.setTopic(updatedPhrase.getTopic());
-////        }
-//
-//        existingPhrase.setDateModified(LocalDateTime.now());
-//        this.phraseRepository.save(existingPhrase);
-//        return existingPhrase;
     }
 
     public List<Phrase> searchPhrases(String searchText) {

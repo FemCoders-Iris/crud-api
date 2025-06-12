@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -19,13 +20,12 @@ public class PhraseController {
         this.phraseService = phraseService;
     }
 
-//    @PostMapping(path="/")
-//    public ResponseEntity<Object> createPhrase(@RequestBody Phrase phrase){
-//        return new ResponseEntity<>(this.phraseService.newPhrase(phrase), HttpStatus.CREATED);
-//    }
-
     @PostMapping(path="/")
     public ResponseEntity<PhraseDTO> createPhrase(@RequestBody PhraseDTO phraseDTO){
+        Optional<Phrase> isExisting = this.phraseService.getPhraseByContent(phraseDTO.getContent());
+        if(isExisting.isPresent()){
+            return new ResponseEntity<>(phraseToDTO(isExisting.get()), HttpStatus.SEE_OTHER);
+        }
         Phrase phrase = this.phraseService.newPhrase(phraseDTO);
         return new ResponseEntity<>(phraseToDTO(phrase), HttpStatus.CREATED);
     }
