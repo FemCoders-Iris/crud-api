@@ -21,7 +21,8 @@ public interface PhraseRepository extends JpaRepository<Phrase, Integer>, JpaSpe
             "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
             "OR LOWER(p.content) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
             "OR LOWER(a.name) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
-            "OR LOWER(t.name) LIKE LOWER(CONCAT('%', :searchText, '%'))",
+            "OR LOWER(t.name) LIKE LOWER(CONCAT('%', :searchText, '%')) " +
+            "GROUP BY p.id",
             nativeQuery = true)
     List<Phrase> searchPhrases(@Param("searchText") String searchText);
 
