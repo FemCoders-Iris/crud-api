@@ -34,14 +34,11 @@ public class TopicService {
                 .toList();
     }
 
-//    public  Topic findByName(String name){
-//        Optional<Topic> isExisting = this.topicRepository.findByName(name);
-//
-//        if (isExisting.isPresent()){
-//            return isExisting.get();
-//        }
-//        Topic savedTopic = new Topic(name);
-//        this.topicRepository.save(savedTopic);
-//        return savedTopic;
-//    }
+    public Optional<Topic> findByName(String name){
+        return this.topicRepository.findByName(name);
+    }
+
+    public Topic newTopic(TopicDTO topicDTO){
+        return this.topicRepository.save(TopicDTO.topicDTOToObject(topicDTO));
+    }
 }
