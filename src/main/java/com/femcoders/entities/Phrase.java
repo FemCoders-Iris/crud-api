@@ -1,57 +1,46 @@
 package com.femcoders.entities;
 
-import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+
 @Entity
 @Table(name = "phrases")
 public class Phrase {
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private String title;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     @NotNull
     private String content;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private String author;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private LocalDateTime dateAdded;
 
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class, TopicView.class})
     private LocalDateTime dateModified;
 
-
-
-//    @JsonView({PhraseGet.class, PhraseGetOne.class, PhrasePost.class})
     @ManyToMany
     @JoinTable(
     name="phrase_topic",
     joinColumns = @JoinColumn(name="id"),
     inverseJoinColumns = @JoinColumn(name="id_topic"))
-    Set<Topic> topics = new HashSet<>();
+    List<Topic> topics = new ArrayList<>();
 
     public Phrase() {}
 
-    public Phrase(String title, String content, String author, Set<Topic> topics) {
+    public Phrase(String title, String content, String author, List<Topic> topics) {
         this.title = title;
         this.content = content;
         this.author = author;
         this.topics = topics;
     }
-
 
     public void addTopic(Topic topic){
         this.topics.add(topic);
@@ -89,11 +78,11 @@ public class Phrase {
         this.author = author;
     }
 
-    public Set<Topic> getTopics() {
+    public List<Topic> getTopics() {
         return topics;
     }
 
-    public void setTopics(Set<Topic> topics) {
+    public void setTopics(List<Topic> topics) {
         this.topics = topics;
     }
 
